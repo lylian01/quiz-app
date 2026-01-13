@@ -12,7 +12,7 @@ export const useFlashCards = () => {
   });
 }
 
-export const useFlashCard = (id) => {
+export const useFlashCardById = (id) => {
   return useQuery({
     queryKey: ['flashcard', id],
     queryFn: async () => {

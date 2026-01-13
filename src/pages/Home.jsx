@@ -1,7 +1,9 @@
-import { use, useEffect, useMemo, useState } from "react";
+import { use, useEffect, useMemo, useRef, useState } from "react";
 import { useFlashCards, useLevel } from "../hooks/useFlashcards";
-import { Search , Users, Award, Clock, ChevronRight , Play,X,Target,Timer,Shuffle, Check} from "lucide-react";
+import { Search , Users, Award, Clock, ChevronRight , Play,X,Target,Timer,Shuffle, Check, Link} from "lucide-react";
 import { useResults } from "../hooks/useResult";
+import Quizz from "./Quizz";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
     const [level, setLevel] = useState("All");
@@ -10,13 +12,13 @@ export default function Home() {
     const {data: levels, isLoading: loadingLevels } = useLevel();
     const {data: results, isLoading: loadingResults } = useResults();
 
+    const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
     const [selectedQuiz, setSelectedQuiz] = useState(null);
     const [numQuestions, setNumQuestions] = useState(10);
     const [timeLimit, setTimeLimit] = useState(20);
-    const [randomQuestions, setRandomQuestions] = useState(true);
-
-
+    const [ynAns, setynAns] = useState(false);
+    const [mChoice, setmChoice] = useState(false);
 
     const dataFilter = useMemo(() => {
         if (!flashcards) return [];
@@ -41,16 +43,19 @@ export default function Home() {
         setNumQuestions(Math.min(10, quiz.cardPairs.length)); // Default to 10 or max available
         setTimeLimit(Math.round(quiz.cardPairs.length * 1.5));
     };
+
     const handleBeginQuiz = () => {
-    console.log('Starting quiz:', {
-      quiz: selectedQuiz,
-      numQuestions,
-      timeLimit,
-      difficulty,
-      randomQuestions
-    });
-    setShowModal(false);
-  };
+        console.log("Starting Quiz with settings:");
+        console.log(selectedQuiz.id);
+        navigate('/quizz', {state: {
+                            idFlashcard: selectedQuiz.id,
+                            numQuestions,
+                            timeLimit,
+                            ynAns,
+                            mChoice
+                        }} );
+        setShowModal(false);
+    };
     
 
   return (
@@ -115,10 +120,10 @@ export default function Home() {
         </div>
         {/* Setup Modal */}
          {showModal && selectedQuiz && (
-            <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-                <div className="bg-(--secondary) border border-gray-700 rounded-2xl max-w-2xl w-full shadow-2xl animate-in">
+            <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4 ">
+                <div className="bg-(--secondary) border border-gray-700 rounded-2xl max-w-2xl w-full shadow-2xl animate-in max-h-165">
                     {/* Modal Header */}
-                    <div className="p-6 rounded-t-2xl  overflow-hidden">
+                    <div className="p-6 rounded-t-2xl overflow-hidden">
                         <div className="z-10 flex items-start justify-between">
                             <div>
                             <h2 className="text-3xl font-bold text-white mb-2">Setup Your Quiz</h2>
@@ -133,9 +138,9 @@ export default function Home() {
                         </div>
                     </div>
                     {/* Modal Body */}
-                    <div className="p-6 bg-white rounded-b-2xl">
+                    <div className="p-6 bg-white  max-h-115 overflow-y-auto">
                         {/* Number of Questions */}
-                        <div className="mb-6"> 
+                        <div className="mb-8"> 
                             <div className="flex items-center gap-2 mb-3">
                                 <Target className="text-blue-400" size={20} />
                                 <label className="font-semibold">Number of Questions</label>
@@ -154,62 +159,60 @@ export default function Home() {
                                     <span className="text-white text-sm ml-1">/ {selectedQuiz.cardPairs.length}</span>
                                 </div>
                             </div>
-                            <p className="text-gray-400 text-sm mt-2">
+                            <p className="text-gray-400 text-sm ">
                                 Choose how many questions you want to answer
                             </p>
                         </div>
                         {/* Time Limit */} 
-                        <div className="mb-6">
+                        <div className="mb-8">
                             <div className="flex items-center gap-2 mb-3">
-                            <Timer className="text-green-400" size={20} />
-                            <label className=" font-semibold">Time Limit (minutes)</label>
+                                <Timer className="text-green-400" size={20} />
+                                <label className=" font-semibold">Time Limit (minutes)</label>
                             </div>
                             <div className="flex items-center gap-4">
-                            <input
-                                type="range"
-                                min="5"
-                                max="120"
-                                step="5"
-                                value={timeLimit}
-                                onChange={(e) => setTimeLimit(parseInt(e.target.value))}
-                                className="flex-1 h-2 bg-(--secondary) rounded-lg appearance-none cursor-pointer accent-(--accent-dark)"
-                            />
-                            <div className="bg-(--secondary) rounded-lg px-4 py-2 min-w-20 text-center">
-                                <span className="text-white font-bold text-xl">{timeLimit}</span>
-                                <span className="text-white text-sm ml-1">min</span>
+                                <input
+                                    type="range"
+                                    min="5"
+                                    max="120"
+                                    step="5"
+                                    value={timeLimit}
+                                    onChange={(e) => setTimeLimit(parseInt(e.target.value))}
+                                    className="flex-1 h-2 bg-(--secondary) rounded-lg appearance-none cursor-pointer accent-(--accent-dark)"
+                                />
+                                <div className="bg-(--secondary) rounded-lg px-4 py-2 min-w-20 text-center">
+                                    <span className="text-white font-bold text-xl">{timeLimit}</span>
+                                    <span className="text-white text-sm ml-1">min</span>
+                                </div>
                             </div>
-                            </div>
-                            <p className="text-gray-400 text-sm mt-2">
+                            <p className="text-gray-400 text-sm">
                             Set your time limit for the quiz
                             </p>
                         </div>
-                        {/* Random Questions Toggle */}
-                       <div className="mb-6">
-                            <div className="flex items-center justify-between bg-(--secondary)  rounded-xl p-4">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 bg-linear-to-br from-orange-500 to-pink-500 rounded-lg flex items-center justify-center">
-                                        <Shuffle className="text-white" size={20} />
-                                    </div>
-                                    <div>
-                                        <p className="text-white font-semibold">Random Questions</p>
-                                        <p className="text-white text-sm">Shuffle question order</p>
-                                    </div>
-                                </div>
+                        {/* Answers Toggle */}
+                        <div className="mb-3">
+                            <label className="flex items-center justify-between gap-2 cursor-pointer">
+                                <span className="font-semibold">True/False</span>
                                 <button
-                                    onClick={() => setRandomQuestions(!randomQuestions)}
-                                    className={`relative w-14 h-7 rounded-full transition-all duration-300 ${
-                                        randomQuestions 
-                                            ? 'bg-linear-to-r from-blue-500 to-purple-600' 
-                                            : 'bg-gray-700'
-                                    }`}
+                                    type="checkbox"
+                                    checked={ynAns}
+                                    onClick={() => setynAns(!ynAns)}
+                                    className={`relative w-14 h-7 rounded-full transition-all duration-300 ${ynAns ? 'bg-blue-600' : 'bg-gray-700'}`}
                                 >
-                                    <div
-                                        className={`absolute top-0.5 left-0.5 w-6 h-6 bg-white rounded-full shadow-lg transition-transform duration-300 ${
-                                            randomQuestions ? 'translate-x-7' : 'translate-x-0'
-                                        }`}
-                                    />
+                                <div className={`absolute top-1 ${ynAns ? 'right-1' : 'left-1'} w-5 h-5 bg-white rounded-full shadow-lg transition-transform duration-300`} />
                                 </button>
-                            </div>
+                            </label>
+                        </div><div className="mb-6">
+                            <label className="flex items-center justify-between gap-2 cursor-pointer">
+                                <span className="font-semibold">Multiple Choice</span>
+                                <button
+                                    type="checkbox"
+                                    checked={mChoice}
+                                    onClick={() => setmChoice(!mChoice)}
+                                    className={`relative w-14 h-7 rounded-full transition-all duration-300 ${mChoice ? 'bg-blue-600' : 'bg-gray-700'}`}
+                                >
+                                <div className={`absolute top-1 ${mChoice ? 'right-1' : 'left-1'} w-5 h-5 bg-white rounded-full shadow-lg transition-transform duration-300`} />
+                                </button>
+                            </label>
                         </div>
                         {/* Summary Box */}
                         <div className="bg-emerald-100 text-emerald-400 border border-emerald-700 rounded-xl p-4 mb-6">
@@ -217,7 +220,7 @@ export default function Home() {
                             <Award className="text-yellow-400" size={18} />
                             Quiz Summary
                             </h3>
-                            <div className="grid grid-cols-3 gap-4 text-center">
+                            <div className="grid grid-cols-2 gap-4 text-center">
                             <div>
                                 <p className="text-emerald-600 text-xs mb-1">Questions</p>
                                 <p className="text-emerald-800 font-bold text-lg">{numQuestions}</p>
@@ -226,28 +229,26 @@ export default function Home() {
                                 <p className="text-emerald-600 text-xs mb-1">Time Limit</p>
                                 <p className="text-emerald-800 font-bold text-lg">{timeLimit}m</p>
                             </div>
-                            <div>
-                                <p className="text-emerald-600 text-xs mb-1">Random Questions</p>
-                                <p className="text-emerald-800 font-bold text-lg">{randomQuestions ? 'Yes' : 'No'}</p>
-                            </div>
                             </div>
                         </div>
-                        {/* Action Buttons */}
-                        <div className="flex gap-3">
-                            <button
-                            onClick={() => setShowModal(false)}
-                            className="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-3 rounded-xl font-semibold transition-all border border-gray-600"
-                            >
-                            Cancel
-                            </button>
-                            <button
-                            onClick={handleBeginQuiz}
-                            className="flex-1 bg-linear-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white py-3 rounded-xl font-semibold transition-all shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 flex items-center justify-center gap-2"
-                            >
-                            <Play size={20} />
-                            Begin Quiz
-                            </button>
-                        </div>
+                        
+                    </div>
+                    {/* Action Buttons */}
+                    <div className="flex gap-3 p-3 bg-white rounded-b-2xl">
+                        <button
+                        onClick={() => setShowModal(false)}
+                        className="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-3 rounded-xl font-semibold transition-all border border-gray-600"
+                        >
+                        Cancel
+                        </button>
+                        <button
+                        onClick={handleBeginQuiz}
+                        className="flex-1 bg-linear-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white py-3 rounded-xl font-semibold transition-all shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 flex items-center justify-center gap-2"
+                        > 
+                        
+                        <Play size={20} />
+                        Begin Quiz
+                        </button>
                     </div>
                 </div>
             </div>

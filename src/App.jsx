@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Home from './pages/Home'
+import Quizz from './pages/Quizz'
 import './App.css'
 import { Trophy } from 'lucide-react'
 
@@ -26,6 +27,7 @@ function App() {
       <BrowserRouter>
       <Routes>
         <Route path='/' element={<Home />}/>
+        <Route path='/quizz' element={<Quizz />}/>
       </Routes>
       </BrowserRouter>
     </div>
