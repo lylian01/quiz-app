@@ -22,6 +22,16 @@ export const useFlashCardById = (id) => {
   });
 }
 
+export const useCardPairById = (id) => {
+  return useQuery({
+    queryKey: ['cardpair', id],
+    queryFn: async () => {
+      const { data } = await flashcardsApi.getById(id);
+      return data;
+    },
+  });
+}
+
 export const useLevel = () =>{
     return useQuery({
         queryKey: ['level'],

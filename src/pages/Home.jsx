@@ -19,6 +19,11 @@ export default function Home() {
     const [timeLimit, setTimeLimit] = useState(20);
     const [ynAns, setynAns] = useState(false);
     const [mChoice, setmChoice] = useState(false);
+    const [isDisabled, setDisabled] = useState(false);
+
+    useEffect(()=>{
+        setDisabled((ynAns === true) || (mChoice === true));
+    },[ynAns,mChoice]);
 
     const dataFilter = useMemo(() => {
         if (!flashcards) return [];
@@ -201,7 +206,8 @@ export default function Home() {
                                 <div className={`absolute top-1 ${ynAns ? 'right-1' : 'left-1'} w-5 h-5 bg-white rounded-full shadow-lg transition-transform duration-300`} />
                                 </button>
                             </label>
-                        </div><div className="mb-6">
+                        </div>
+                        <div className="mb-6">
                             <label className="flex items-center justify-between gap-2 cursor-pointer">
                                 <span className="font-semibold">Multiple Choice</span>
                                 <button
@@ -213,7 +219,11 @@ export default function Home() {
                                 <div className={`absolute top-1 ${mChoice ? 'right-1' : 'left-1'} w-5 h-5 bg-white rounded-full shadow-lg transition-transform duration-300`} />
                                 </button>
                             </label>
+                            <p className="text-red-400 text-sm">
+                            Please select at least one question type
+                            </p>
                         </div>
+                        
                         {/* Summary Box */}
                         <div className="bg-emerald-100 text-emerald-400 border border-emerald-700 rounded-xl p-4 mb-6">
                             <h3 className=" font-semibold mb-3 flex items-center gap-2">
@@ -242,8 +252,12 @@ export default function Home() {
                         Cancel
                         </button>
                         <button
-                        onClick={handleBeginQuiz}
-                        className="flex-1 bg-linear-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white py-3 rounded-xl font-semibold transition-all shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 flex items-center justify-center gap-2"
+                            disabled={!isDisabled}
+                            onClick={handleBeginQuiz}                
+                            className="flex-1 bg-linear-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700
+                             text-white py-3 rounded-xl font-semibold transition-all shadow-lg shadow-blue-500/30 
+                             hover:shadow-xl hover:shadow-blue-500/40 flex items-center justify-center gap-2
+                                 disabled:text-gray-700 disabled:cursor-not-allowed disabled:hover:bg-gray-400 "
                         > 
                         
                         <Play size={20} />
