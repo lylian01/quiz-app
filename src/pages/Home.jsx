@@ -74,17 +74,19 @@ export default function Home() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full bg-white border border-(--primary-light)  
-              rounded-xl pl-12 pr-4 py-4  placeholder-gray-500 
+              rounded-lg pl-12 pr-4 py-4  placeholder-gray-500 
               transition-all focus-visible:outline-none "
             />
           </div> 
         {/* Levels */}
-        <div className="grid grid-cols-6 md:grid-cols-3 lg:grid-cols-12 gap-4 mb-3">
+        <div className="grid grid-cols-6 md:grid-cols-3 lg:grid-cols-12 gap-4 mb-5">
             {allLevels?.map((lvl) => (
-                    <button key={lvl} className={`${level === lvl ? "bg-(--secondary) text-white font-bold" : "bg-(--primary)"} p-1 rounded-xl shadow border-2 border-(--primary-light) cursor-pointer
-                        hover:bg-(--secondary) hover:font-bold hover:-translate-y-1 hover:text-white transition-all `}
+                    <button key={lvl} className={`${level === lvl ? 
+                        "bg-(--secondary) font-bold " : 
+                        "bg-white "} p-1 rounded-lg shadow border-2 border-(--primary-light) cursor-pointer
+                        hover:border-(--secondary) hover:-translate-y-1 hover:bg-(--primary) transition-all `}
                     onClick={() => {setLevel(lvl); setSearchTerm("")}}>
-                    <h2 className="text-xl text-center ">{lvl}</h2>
+                    <h2 className="text-xl text-center">{lvl}</h2>
                 </button>
             ))}
         </div>
@@ -93,8 +95,8 @@ export default function Home() {
             {dataFilter?.map((flashcard) => (
                 <div key={flashcard.id} className="bg-linear-to-r from-(--primary) to-(--secondary) shadow border-2 border-(--primary-light)
                         hover:from-(--secondary) hover:-translate-y-1 transition-all
-                        cursor-pointer rounded-xl">
-                    <div className="bg-white mt-14 p-5">
+                        cursor-pointer rounded-lg ">
+                    <div className="bg-white mt-14 p-5 rounded-b-lg">
                         <p className="text-xl font-bold text-(--accent-dark)">{flashcard.cardTitle}</p>
                         <p className="text-base text-gray-800 my-1">{flashcard.cardDescription}</p>
                         <div className="flex items-center gap-4 mb-4 text-sm">
@@ -112,7 +114,7 @@ export default function Home() {
                             </div>
                         </div>
                         <button 
-                            className="w-full  text-white py-3 rounded-xl font-semibold flex items-center justify-center gap-2 
+                            className="w-full  text-white py-3 rounded-lg font-semibold flex items-center justify-center gap-2 
                                            bg-(--secondary) hover:bg-(--secondary-dark) transition-all"
                             onClick={() => handleStartQuiz(flashcard)}>
                             <Play size={18} />

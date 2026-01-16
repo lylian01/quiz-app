@@ -10,3 +10,8 @@
  --test :#E5DDD5 ;
  --testa : #F8F6F0 ;--testb :#E8DFD0;
 }
+
+body{
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    color: var(--accent-dark);
+}

@@ -67,46 +67,39 @@ export default function Quizz() {
         }
     }, [loadingFlashcards]);
 
-    // Handle khi user chọn đáp án
-    const handleAnswer = (questionIndex, answer) => {
-        if (isScoring) return; // Không cho chọn khi đã submit
-        
+   const handleAnswer = ((questionIndex, answer)=>{
+        if(isScoring) return ;
+
         setResults(prev => ({
             ...prev,
-            [questionIndex]: answer
-        }));
-    };
+            [questionIndex]:answer  // ghi đè giá trị mới nhất
+        }))
+   })  
 
-    // Handle submit và chấm điểm
     const handleSubmit = () => {
         setScoring(true);
-        
-        // Tính điểm
-        let correctCount = 0;
-        questions.forEach((question, index) => {
+
+        let correntCount = 0;
+        questions.forEach((question,index)=>{
             const userAnswer = results[index];
             const correctAnswer = question.correctAnswer;
-            
-            if (userAnswer === correctAnswer) {
-                correctCount++;
-            }
-        });
-        
+
+            if(userAnswer == correctAnswer) correctAnswer++;
+        })
+
         console.log(`Correct: ${correctCount}/${questions.length}`);
-    };
+    }
 
-    // Check xem câu hỏi đã được trả lời chưa
-    const isAnswered = (questionIndex) => {
-        return results.hasOwnProperty(questionIndex);
-    };
+    const isAnswered = (questionIndex) =>{
+        return results.hasOwnProperty(questionIndex);  // tương tự include
+    }
 
-    // Get button class based on state
-    const getButtonClass = (questionIndex, answer, isCorrectAnswer) => {
-        const userAnswer = results[questionIndex];
-        const isSelected = userAnswer === answer;
-        
+   const getButtonClass = (questionIndex, answer, isCorrectAnswer) => {
+        const userAnswer = results[questionIndex];  //lấy giá trị đã ghi ở trên handleAnswer
+        const isSelected = userAnswer === answer;   
+
         const baseClass = "px-4 py-4 my-1 rounded-lg w-full transition-all duration-300";
-        
+
         // Chưa submit
         if (!isScoring) {
             if (isSelected) {
@@ -114,10 +107,10 @@ export default function Quizz() {
             }
             return `${baseClass} bg-white border-2 border-gray-200 hover:border-[#A8B5A0] hover:bg-[#F9F6F0]`;
         }
-        
+
         // Đã submit - hiện đáp án đúng/sai
         if (isCorrectAnswer) {
-            return `${baseClass} bg-gradient-to-r from-[#A8B5A0] to-[#96A38E] text-white border-2 border-[#96A38E]`;
+            return `${baseClass} bg-gradient-to-r from-[#A8B5A0] to-[#96A38E] text-white border-2 border-[#96A38E]`; 
         }
         
         if (isSelected && !isCorrectAnswer) {
@@ -125,7 +118,7 @@ export default function Quizz() {
         }
         
         return `${baseClass} bg-white border-2 border-gray-200 opacity-60`;
-    };
+   }
 
     if (loadingFlashcards) {
         return <div className="p-8 text-center">Loading...</div>;
@@ -198,39 +191,40 @@ export default function Quizz() {
                             </div>
                         )
                     })}
-                   
-                   {/* SUBMIT BUTTON */}
-                   {!isScoring && (
-                       <button 
-                           onClick={handleSubmit}
-                           disabled={Object.keys(results).length !== questions.length}
-                           className="w-full py-4 bg-linear-to-r from-[#8C6A4E] to-[#6F4E37] text-white font-bold rounded-lg hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-                       >
-                           Submit ({Object.keys(results).length}/{questions.length} answered)
-                       </button>
-                   )}
+                    {/* SUBMIT BUTTON */}
+                    {!isScoring && (
+                        <button 
+                            onClick={handleSubmit}
+                            disabled={Object.keys(results).length !== questions.length}
+                            className="w-full py-4 bg-linear-to-r from-[#8C6A4E] to-[#6F4E37] text-white font-bold rounded-lg hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                        >
+                            Submit ({Object.keys(results).length}/{questions.length} answered)
+                        </button>
+                    )}
                 </div>
                 
                 <div className="col-span-3 bg-white rounded-lg shadow-md p-4">
                     <h3 className="font-bold mb-4">Progress</h3>
-                    <div className="space-y-2 grid grid-flow-col grid-rows-10">
-                        {questions.map((_, index) => (
-                            <div key={index} className="flex items-center gap-2">
-                                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
-                                    isAnswered(index) 
-                                        ? 'bg-[#A8B5A0] text-white' 
-                                        : 'bg-gray-200 text-gray-500'
-                                }`}>
-                                    {index + 1}
+                    {!isScoring && (
+                        <div className="grid grid-cols-4 gap-1 text-center">
+                            {questions.map((_,index)=>(
+                                <div key={index}  className={`${isAnswered(index) ? 'bg-[#A8B5A0] text-white'  : 'bg-gray-200 text-gray-500'}
+                                    border rounded`}>{index+1}</div>
+                            ))}
+                        </div>
+                    )}
+                    {isScoring && (
+                        <div className="grid grid-2 gap-1 text-xl ">
+                            {questions.map((_,index)=>(
+                                <div>
+                                    {index + 1} {results[index] === questions[index].correctAnswer ? 
+                                                    <span className="text-green-500">✓</span> :
+                                                    <span className="text-red-500">✗</span> }
                                 </div>
-                                {isScoring && (
-                                    <span className="text-sm">
-                                        {results[index] === questions[index].correctAnswer ? '✓' : '✗'}
-                                    </span>
-                                )}
-                            </div>
-                        ))}
-                    </div>
+                            ))}
+                        </div>
+                    )}
+                           
                 </div>
             </div>
     )
