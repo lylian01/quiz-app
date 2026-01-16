@@ -7,7 +7,7 @@ import { Trophy } from 'lucide-react'
 function App() {
 
   return (
-    <div className="bg-(--secondary-dark) h-full min-h-screen">
+    <div className="bg-radial-[at_100%_90%] from-(--primary) to-(--primary-light) from-60% h-full min-h-screen">
       {/* Header */}
       <nav className="bg-white shadow-sm p-4">
         <div className="container mx-auto flex items-center gap-3">

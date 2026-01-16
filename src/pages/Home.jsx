@@ -73,7 +73,7 @@ export default function Home() {
               placeholder="Search for quizzes..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-(--primary) border border-(--primary-light)  
+              className="w-full bg-white border border-(--primary-light)  
               rounded-xl pl-12 pr-4 py-4  placeholder-gray-500 
               transition-all focus-visible:outline-none "
             />
