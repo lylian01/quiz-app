@@ -1,6 +1,6 @@
 import { use, useEffect, useMemo, useRef, useState } from "react";
 import { useFlashCards, useLevel } from "../hooks/useFlashcards";
-import { Search , Users, Award, Clock, ChevronRight , Play,X,Target,Timer,Shuffle, Check, Link} from "lucide-react";
+import { Search , Users, Award, Clock, ChevronRight , Play,X,Target,Timer} from "lucide-react";
 import { useResults } from "../hooks/useResult";
 import Quizz from "./Quizz";
 import { useNavigate } from "react-router-dom";
@@ -110,7 +110,7 @@ export default function Home() {
                             </div>
                             <div className="flex items-center gap-1.5 text-gray-800">
                                 <Users size={16} />
-                                <span>{results?.filter(r => r.flashcardId === flashcard.id)?.length || 0}</span>
+                                <span>{results?.filter(r => r.idFC === flashcard.id)?.length || 0}</span>
                             </div>
                         </div>
                         <button 
@@ -179,9 +179,9 @@ export default function Home() {
                             <div className="flex items-center gap-4">
                                 <input
                                     type="range"
-                                    min="5"
+                                    min="1"
                                     max="120"
-                                    step="5"
+                                    step="1"
                                     value={timeLimit}
                                     onChange={(e) => setTimeLimit(parseInt(e.target.value))}
                                     className="flex-1 h-2 bg-(--secondary) rounded-lg appearance-none cursor-pointer accent-(--accent-dark)"

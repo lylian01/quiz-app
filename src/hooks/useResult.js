@@ -1,5 +1,4 @@
-import { use, useMutation } from "react";
-import { useQueryClient , useQuery} from "@tanstack/react-query";
+import { useQueryClient , useQuery, useMutation} from "@tanstack/react-query";
 import { resultApi } from '../api/flashcard';
 
 
