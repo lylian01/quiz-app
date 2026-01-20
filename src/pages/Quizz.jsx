@@ -3,6 +3,7 @@ import { useFlashCardById } from "../hooks/useFlashcards";
 import { useCreateResult } from "../hooks/useResult";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import moment from "moment";
+import Loading from "../components/loading";
 
 export default function Quizz() {
     const data = useLocation();
@@ -246,7 +247,11 @@ export default function Quizz() {
     };
 
     if (loadingFlashcards) {
-        return <div className="p-8 text-center">Loading...</div>;
+        return <div className="grid grid-cols-3 p-10 gap-4">
+            {Array.from({length : 9}).map((_,i)=>(
+                <div key={i}><Loading /></div>
+            ))}   
+        </div>;
     }
 
     return ( 

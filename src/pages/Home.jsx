@@ -2,7 +2,7 @@ import { use, useEffect, useMemo, useRef, useState } from "react";
 import { useFlashCards, useLevel } from "../hooks/useFlashcards";
 import { Search , Users, Award, Clock, ChevronRight , Play,X,Target,Timer} from "lucide-react";
 import { useResults } from "../hooks/useResult";
-import Quizz from "./Quizz";
+import Loading from "../components/loading";
 import { useNavigate } from "react-router-dom";
 
 export default function Home() {
@@ -37,7 +37,11 @@ export default function Home() {
 
         
     if (loadingFlashcards || loadingLevels || loadingResults) {
-        return <div className="p-8 text-center">Loading...</div>;
+        return <div className="grid grid-cols-3 p-10 gap-4">
+            {Array.from({length : 9}).map((_,i)=>(
+                <div key={i}><Loading /></div>
+            ))}   
+        </div>;
     }
     
     const allLevels = ["All", ...levels];
