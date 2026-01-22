@@ -3,7 +3,7 @@ import Loading from "../components/loading";
 
 export default function Rank() {
     const {data: results , isLoading: loadingResult} = useResults();
-    const rankResults = results? [...results].sort((a,b) => b.percentCorrent - a.percentCorrent).slice(0,10) : [];
+    const rankResults = results? [...results].sort((a,b) => b.percentCorrent - a.percentCorrent) : [];
 
     if (loadingResult) {
         return <div className="grid grid-cols-3 p-10 gap-4">
