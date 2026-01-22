@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { useFlashCardById } from "../hooks/useFlashcards";
+import { useFlashCardById } from "../hooks/useFlashCards";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Loading from "../components/loading";
 import Score from "../components/score";
