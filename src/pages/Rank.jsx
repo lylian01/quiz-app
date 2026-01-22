@@ -34,8 +34,8 @@ export default function Rank() {
         return "text-gray-700";
     };
     return (
-        <div className="container mx-auto p-8 grid grid-cols-12 gap-4">
-            <div className="col-span-8 bg-white rounded-2xl shadow-xl p-6 h-min">
+        <div className="container mx-auto p-8 grid grid-cols-1 lg:grid-cols-12 gap-4">
+            <div className="lg:col-span-8 grid-cols-1 bg-white rounded-2xl shadow-xl p-6 h-min">
                 <div className="flex items-center gap-3 mb-6">
                     <svg className="w-8 h-8 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
@@ -48,7 +48,7 @@ export default function Rank() {
                         {/* Background decoration */}
                         <div className={`absolute top-0 right-0 w-32 h-32 ${index === 0 ? 'bg-yellow-200' : index === 1 ? 'bg-gray-200' : 'bg-orange-200'} rounded-full opacity-20 -mr-16 -mt-16`}></div>
                         
-                        <div className="relative flex items-center justify-between">
+                        <div className="relative lg:flex items-center lg:justify-between">
                             <div className="flex items-center gap-4">
                                 {/* Medal */}
                                 <div className={`${getMedalStyle(index)} ${index === 0 ? 'w-16 h-16' : 'w-14 h-14'} rounded-full flex items-center justify-center shadow-lg`}>
@@ -76,7 +76,7 @@ export default function Rank() {
                             </div>
                             {/* Score */}
                             <div className="text-right">
-                                <div className={`${index === 0 ? 'text-4xl' : 'text-3xl'} font-bold ${getScoreColor(index)}`}>
+                                <div className={`${index === 0 ? 'lg:text-4xl' : 'lg:text-3xl'} font-bold ${getScoreColor(index)}`}>
                                     {result.percentCorrent * 10}
                                 </div>
                                 <div className="text-sm text-gray-500 font-semibold">points</div>
@@ -85,7 +85,7 @@ export default function Rank() {
                 </div>                               
                 ))}
             </div>
-            <div className="col-span-4 bg-white rounded-2xl shadow-xl p-6 sticky">
+            <div className="lg:col-span-4 grid-cols-1 bg-white rounded-2xl shadow-xl p-6 sticky">
                 <div className="flex items-center gap-3 mb-6">
                     <svg className="w-6 h-6 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd"/>

@@ -173,9 +173,9 @@ export default function Quizz() {
         </div>;
     }
 
-    return ( 
-            <div className="container mx-auto p-8 grid grid-cols-12 gap-4 ">
-                <div className="col-span-9">
+    return (  
+            <div className="container mx-auto p-8 flex lg:grid lg:grid-cols-12 gap-4 flex-col-reverse ">
+                <div className="lg:col-span-9">
                     {/* SCORE */}
                     {isScoring && (
                         <Score idFlashcard={idFlashcard} quesCorrent={correntCount} quesLength={questions.length} questionsSkip={questionsSkip} time={countdown} />
@@ -265,7 +265,7 @@ export default function Quizz() {
                     </div>
                 </div>
                 {/* RESULTS ANS */}
-                <div className="col-span-3 bg-white rounded-lg shadow-md p-4 h-fit sticky top-6">
+                <div className="lg:col-span-3 bg-white rounded-lg shadow-md p-4 h-fit sticky top-6">
                     {/* PROGRESS */}
                     <div>
                       <h3 className="font-bold ">Timer</h3>
